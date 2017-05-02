@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <style>
+        div {
+            height: 25vmin;
+            width: 25vmin;
+            background-color: blue;
+            margin: 1vh;
+        }
+    </style>
+    <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
+    <script>
+        $(document).ready(function(){
+            $('div').on('click', function(){
+                var divClass = this.className;
+                var divRow = $(this).attr('row');
+                var divCol = $(this).attr('col');
+                console.log('Div\' class name is:',divClass);
+                console.log('Div\' class name is:',divRow);
+                console.log('Div\' class name is:',divCol);
+            });
+        });
+
+    </script>
+</head>
+<body>
+<div class="div1" row="1" col="1"></div>
+<div class="div2" row="1" col="2"></div>
+</body>
+</html>
