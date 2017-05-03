@@ -1,5 +1,5 @@
 
-var currentPlayer = player.One;
+
 
 var player = {
     One: {
@@ -28,9 +28,11 @@ var player = {
     }
 };
 
+var currentPlayer = player.One;
 
 $(document).ready(function(){
     createBoard();
+    $('.dropTokenHere').click(tokenDrop);
 });
 
 var boardSizeColumns = 6;
@@ -40,12 +42,12 @@ var boardDivs = [];
 
 function createBoard() {
 
-    for (var i = 0; i <= boardSizeRows; i++) {
+    for (var i = boardSizeRows; i >= 0; i--) {
         var row = i;
         for (var j = 0; j < boardSizeColumns; j++) {
             var column = j;
             var newDiv = $('<div>');
-            if(i===0){
+            if(i===boardSizeRows){
                 $('body').append(newDiv);
                 $(newDiv).css({
                     "background-color":"blue",
@@ -57,10 +59,13 @@ function createBoard() {
                     "margin": "2px"
                 });
                 $(newDiv).text('COLUMN ' + column);
+                $(newDiv).addClass('dropTokenHere');
+                $(newDiv).attr('column', column);
                 column++;
             } else {
                 $('body').append(newDiv);
                 $(newDiv).text('column: ' + column + ' row: ' + row);
+                $(newDiv).attr('id', '' + column + row);
                 $(newDiv).css({
                     "border-radius": '50%',
                     "border": "1px solid black",
@@ -68,13 +73,12 @@ function createBoard() {
                     'width': '150px',
                     "display": "inline-block"
                 });
-                var div= new divCreator();
+                var div = new divCreator();
                 div.column = j;
                 div.row = i;
-
+                div.open = 'open';
                 boardDivs.push(div);
                 column++;
-                row++;
             }
         }
         $('body').append('<br>');
@@ -88,22 +92,56 @@ function createBoard() {
     }
 }
 
+var columnObjectsArray = [];
 
-var currentDiv = //whatever div/array is clicked to drop the token into
+//drop token onto the gameboard, find associated div, change token color
+function tokenDrop(){
+    columnObjectsArray = [];
+    var divCol = $(this).attr('column');
+    //console.log($(boardDivs).find[divCol]);
 
-function tokenDrop() {
-    $(this).arrayName.push(currentPLayer.color);
-    $('#divCounter').findClass('currentDivClass').style('background-color', currentPLayer.color);
+    for(var i = 0; i < boardDivs.length; i++){
+        if(boardDivs[i].column == divCol){
+            columnObjectsArray.push(boardDivs[i]);
+        } else {
+            console.log('no columns');
+        }
+    }
 
-    $(currentDiv).find().attr('row');
-    currentDiv.divCounter++; //update div id #;
-};
+    for(var j = 0; j < columnObjectsArray.length; j++) {
+        columnObjectsArray = columnObjectsArray.reverse();
+        console.log(columnObjectsArray[j]);
+        if (columnObjectsArray[j].open === 'open') {
+            console.log('open');
+            var currentDiv = columnObjectsArray[j];
+            currentDiv.open = 'closed';
+            currentDiv.color = 'blue';
+            console.log(currentDiv);
+            var id = '#' + divCol + j;
+            $(id).css({'background-color': currentPlayer.color});
+            //changeColor(columnObjectsArray[i]);
+            //checkWinPatterns();
+            currentPlayer.changePlayer();
+            return;
+        } else {
+            console.log('nothing open');
+        }
+    }
+}
+
+////////////////////////////
 
 function checkWinPatterns(){
     checkColumnWins();
     checkRowWins();
     checkDiagonalWins();
 }
+
+
+
+///////////////////////////////// - TJ
+
+
 
 function checkColumnWins() {
     var matchCount = 0;
@@ -124,6 +162,25 @@ function checkColumnWins() {
     }
 }
 
+
+
+
+
+
+
+
+
+
+
+//////////////////////////////// - Anna
+
+
+
+
+
+
+
+
 function checkRowWins() {
     //currentArray
     for (i = 0; i < currentArray.length; i++) {
@@ -134,3 +191,18 @@ function checkRowWins() {
         }
     }
 }
+
+
+
+
+
+
+
+
+
+
+
+
+////////////////////////////////////////// - Alex
+
+function checkDiagonalWins() {}
