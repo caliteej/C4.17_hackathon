@@ -115,7 +115,7 @@ function tokenDrop(){
             console.log('open');
             var currentDiv = columnObjectsArray[j];
             currentDiv.open = 'closed';
-            currentDiv.color = 'blue';
+            currentDiv.color = currentPlayer.color;
             console.log(currentDiv);
             var id = '#' + divCol + j;
             $(id).css({'background-color': currentPlayer.color});
@@ -145,6 +145,8 @@ function checkWinPatterns(){
 
 function checkColumnWins() {
     var matchCount = 0;
+
+    boardDivs.attr('column')
     //add column incrementer
     currentColumn = name(i);
     for (i = 0; i < currentColumn.length; i) {
