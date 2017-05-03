@@ -34,12 +34,11 @@ $(document).ready(function(){
     createBoard();
     $('.dropTokenHere').click(tokenDrop);
 });
-
+//sets board size and array for divs created
 var boardSizeColumns = 6;
 var boardSizeRows = 7;
-
 var boardDivs = [];
-
+//creates the board sets css styling and creates objects attached to each div
 function createBoard() {
 
     for (var i = boardSizeRows; i >= 0; i--) {
@@ -77,6 +76,7 @@ function createBoard() {
                 div.column = j;
                 div.row = i;
                 div.open = 'open';
+                div.color = null;
                 boardDivs.push(div);
                 column++;
             }
@@ -107,9 +107,8 @@ function tokenDrop(){
             console.log('no columns');
         }
     }
-
+    columnObjectsArray = columnObjectsArray.reverse();
     for(var j = 0; j < columnObjectsArray.length; j++) {
-        columnObjectsArray = columnObjectsArray.reverse();
         console.log(columnObjectsArray[j]);
         if (columnObjectsArray[j].open === 'open') {
             console.log('open');
@@ -120,7 +119,7 @@ function tokenDrop(){
             var id = '#' + divCol + j;
             $(id).css({'background-color': currentPlayer.color});
             //changeColor(columnObjectsArray[i]);
-            //checkWinPatterns();
+            checkWinPatterns();
             currentPlayer.changePlayer();
             return;
         } else {
@@ -137,32 +136,32 @@ function checkWinPatterns(){
     checkDiagonalWins();
 }
 
+// ///////////////////////////////// - TJ
 
 
-///////////////////////////////// - TJ
 
 
 
-function checkColumnWins() {
-    var matchCount = 0;
 
-    boardDivs.attr('column')
-    //add column incrementer
-    currentColumn = name(i);
-    for (i = 0; i < currentColumn.length; i) {
-        if (currentColumn[i] === currentColumn[++i]) {
-            console.log('match');
-            matchCount++;
-        } else {
-            console.log('not a match');
-            matchCount = 0;
-            return false;
-        }
-        if (matchCount === 4) { //will need to come back and update this to reflect the desired number of matches needed
-            console.log('Player ' + currentState + ' has won!');
-        }
-    }
-}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -177,19 +176,30 @@ function checkColumnWins() {
 //////////////////////////////// - Anna
 
 
-
-
-
-
-
-
 function checkRowWins() {
-    //currentArray
-    for (i = 0; i < currentArray.length; i++) {
+    rowArray = [];
+    var matchCount = 0;
 
-        if (columnArrayA[i] === columnArrayB[i]) {
-            console.log('match');
-            matchCount++;
+    var previousColor = null;
+
+    for (var r = 0; r < boardSizeRows; r++) {
+        for (var i = 0; i < boardDivs.length; i++) {
+            if (boardDivs[i].row === r) {
+                rowArray.push(boardDivs[i]);
+            }
+        }
+        for (var j = 0; j < rowArray.length; j++) {
+            var color = rowArray[j].color;
+            if (color !== null && previousColor === color) {
+                matchCount++;
+                if (matchCount === 2) {
+                    console.log('you win');
+                    return color;
+                }
+            } else {
+                matchCount = 0;
+            }
+            previousColor = color;
         }
     }
 }
@@ -205,6 +215,6 @@ function checkRowWins() {
 
 
 
-////////////////////////////////////////// - Alex
+//
+// ////////////////////////////////////////// - Alex
 
-function checkDiagonalWins() {}
