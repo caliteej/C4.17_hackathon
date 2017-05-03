@@ -40,19 +40,19 @@ var boardSizeRows = 7;
 
 var boardDivs = [];
 
-function createBoard() {
 
+function createBoard() {
     for (var i = boardSizeRows; i >= 0; i--) {
         var row = i;
         for (var j = 0; j < boardSizeColumns; j++) {
             var column = j;
             var newDiv = $('<div>');
-            if(i===boardSizeRows){
-                $('body').append(newDiv);
+            if (i === boardSizeRows) {
+                $('.dropspot').append(newDiv);
                 $(newDiv).css({
-                    "background-color":"blue",
-                    "height": "100px",
-                    "width": "150px",
+                    "background-color": "blue",
+                    "height": "10vmin",
+                    "width": "15vmin",
                     "display": "inline-block",
                     "border": "solid black 1px",
                     "color": "white",
@@ -62,34 +62,48 @@ function createBoard() {
                 $(newDiv).addClass('dropTokenHere');
                 $(newDiv).attr('column', column);
                 column++;
-            } else {
-                $('body').append(newDiv);
-                $(newDiv).text('column: ' + column + ' row: ' + row);
-                $(newDiv).attr('id', '' + column + row);
-                $(newDiv).css({
-                    "border-radius": '50%',
-                    "border": "1px solid black",
-                    'height': '150px',
-                    'width': '150px',
-                    "display": "inline-block"
-                });
-                var div = new divCreator();
-                div.column = j;
-                div.row = i;
-                div.open = 'open';
-                boardDivs.push(div);
-                column++;
             }
         }
-        $('body').append('<br>');
+    }
+
+    for (var k = boardSizeRows-1; k >= 0; k--) {
+        var row = k;
+        var rowDiv = $('<div>');
+        $('.tokenspot').append(rowDiv);
+        $(rowDiv).css({
+            "border": "black solid 1px"
+        });
+        for (var col = 0; col < boardSizeColumns; col++) {
+            var column = col;
+            var colDiv = $('<div>');
+            $(rowDiv).append(colDiv);
+            $(colDiv).text('column: ' + column + ' row: ' + row);
+            $(colDiv).attr('id', '' + column + row);
+            $(colDiv).addClass('tokenHolder');
+            $(colDiv).css({
+                "border-radius": '50%',
+                "border": "1px solid black",
+                'height': '12vmin',
+                'width': '12vmin',
+                "display": "inline-block"
+            });
+            var div = new divCreator();
+                div.column = col;
+                div.row = k;
+                div.open = 'open';
+                div.color = null;
+                boardDivs.push(div);
+                column++;
+        }
     }
     function divCreator(){
         var newDiv = {
             column: null,
             row: null,
-            tokens: null
+            color: null
         }
     }
+
 }
 
 var columnObjectsArray = [];
@@ -98,19 +112,19 @@ var columnObjectsArray = [];
 function tokenDrop(){
     columnObjectsArray = [];
     var divCol = $(this).attr('column');
-    //console.log($(boardDivs).find[divCol]);
+    console.log(divCol);
+    console.log($(boardDivs).find[divCol]);
 
     for(var i = 0; i < boardDivs.length; i++){
         if(boardDivs[i].column == divCol){
             columnObjectsArray.push(boardDivs[i]);
         } else {
-            console.log('no columns');
+            //console.log('no columns');
         }
     }
-
+    columnObjectsArray = columnObjectsArray.reverse();
     for(var j = 0; j < columnObjectsArray.length; j++) {
-        columnObjectsArray = columnObjectsArray.reverse();
-        console.log(columnObjectsArray[j]);
+        //console.log(columnObjectsArray[j]);
         if (columnObjectsArray[j].open === 'open') {
             console.log('open');
             var currentDiv = columnObjectsArray[j];
@@ -122,6 +136,7 @@ function tokenDrop(){
             //changeColor(columnObjectsArray[i]);
             //checkWinPatterns();
             currentPlayer.changePlayer();
+            checkWinPatterns();
             return;
         } else {
             console.log('nothing open');
@@ -133,8 +148,8 @@ function tokenDrop(){
 
 function checkWinPatterns(){
     checkColumnWins();
-    checkRowWins();
-    checkDiagonalWins();
+    //checkRowWins();
+    //checkDiagonalWins();
 }
 
 
@@ -146,20 +161,36 @@ function checkWinPatterns(){
 function checkColumnWins() {
     var matchCount = 0;
 
-    boardDivs.attr('column')
-    //add column incrementer
-    currentColumn = name(i);
-    for (i = 0; i < currentColumn.length; i) {
-        if (currentColumn[i] === currentColumn[++i]) {
-            console.log('match');
-            matchCount++;
-        } else {
-            console.log('not a match');
-            matchCount = 0;
-            return false;
+    var currentColumn = 0;
+
+    columnObjectsArray = [];
+
+    for(var col = 0; col < boardSizeColumns; col++) {
+        columnObjectsArray = [];
+        //build array of objects in the (col) column to then compare their colors
+        for (var i = 0; i < boardDivs.length; i++) {
+            if (boardDivs[i].column == col) {
+                columnObjectsArray.push(boardDivs[i]);
+            }
         }
-        if (matchCount === 4) { //will need to come back and update this to reflect the desired number of matches needed
-            console.log('Player ' + currentState + ' has won!');
+        //flip array so that objects start from bottom to top
+        columnObjectsArray = columnObjectsArray.reverse();
+        //loop through new array
+        for (var j = 0; j < columnObjectsArray.length; j) {
+            if (columnObjectsArray[j].color === null) {
+                matchCount = 0;
+                break;
+            } else if (columnObjectsArray[j].color === columnObjectsArray[++j].color) {
+                matchCount++;
+                console.log('its a match');
+                if (matchCount === 3) {
+                    alert('You won!');
+                    return;
+                }
+            } else {
+                matchCount = 0;
+                console.log('no matches');
+            }
         }
     }
 }
