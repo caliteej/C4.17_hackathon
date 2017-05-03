@@ -15,17 +15,17 @@ var player = {
     //    function for token drop
     //    check win condition
         changePlayer: function() {
+            currentPlayer = player.Three;
+        }
+    },
+    Three: {
+        color: 'blue',
+    //    function for token drop
+    //    check win condition
+        changePlayer: function() {
             currentPlayer = player.One;
         }
     }
-    // Three: {
-    //     color: 'blue',
-    // //    function for token drop
-    // //    check win condition
-    //     changePlayer: function() {
-    //         currentPlayer = player.One;
-    //     }
-    // }
 };
 
 var currentPlayer = player.One;
