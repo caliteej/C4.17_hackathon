@@ -148,7 +148,7 @@ function tokenDrop(){
 
 function checkWinPatterns(){
     checkColumnWins();
-    //checkRowWins();
+    checkRowWins();
     //checkDiagonalWins();
 }
 
@@ -207,30 +207,33 @@ function checkColumnWins() {
 
 //////////////////////////////// - Anna
 
-
-
-
-
-
-
-
 function checkRowWins() {
-    //currentArray
-    for (i = 0; i < currentArray.length; i++) {
+    rowArray = [];
+    var matchCount = 0;
 
-        if (columnArrayA[i] === columnArrayB[i]) {
-            console.log('match');
-            matchCount++;
+    var previousColor = null;
+
+    for (var r = 0; r < boardSizeRows; r++) {
+        for (var i = 0; i < boardDivs.length; i++) {
+            if (boardDivs[i].row === r) {
+                rowArray.push(boardDivs[i]);
+            }
+        }
+        for (var j = 0; j < rowArray.length; j++) {
+            var color = rowArray[j].color;
+            if (color !== null && previousColor === color) {
+                matchCount++;
+                if (matchCount === 2) {
+                    console.log('you win');
+                    return color;
+                }
+            } else {
+                matchCount = 0;
+            }
+            previousColor = color;
         }
     }
 }
-
-
-
-
-
-
-
 
 
 
