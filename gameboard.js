@@ -40,19 +40,19 @@ var boardSizeRows = 7;
 
 var boardDivs = [];
 
-function createBoard() {
 
+function createBoard() {
     for (var i = boardSizeRows; i >= 0; i--) {
         var row = i;
         for (var j = 0; j < boardSizeColumns; j++) {
             var column = j;
             var newDiv = $('<div>');
-            if(i===boardSizeRows){
-                $('body').append(newDiv);
+            if (i === boardSizeRows) {
+                $('.dropspot').append(newDiv);
                 $(newDiv).css({
-                    "background-color":"blue",
-                    "height": "100px",
-                    "width": "150px",
+                    "background-color": "blue",
+                    "height": "10vmin",
+                    "width": "15vmin",
                     "display": "inline-block",
                     "border": "solid black 1px",
                     "color": "white",
@@ -62,27 +62,39 @@ function createBoard() {
                 $(newDiv).addClass('dropTokenHere');
                 $(newDiv).attr('column', column);
                 column++;
-            } else {
-                $('body').append(newDiv);
-                $(newDiv).text('column: ' + column + ' row: ' + row);
-                $(newDiv).attr('id', '' + column + row);
-                $(newDiv).css({
-                    "border-radius": '50%',
-                    "border": "1px solid black",
-                    'height': '150px',
-                    'width': '150px',
-                    "display": "inline-block"
-                });
-                var div = new divCreator();
-                div.column = j;
-                div.row = i;
+            }
+        }
+    }
+
+    for (var k = boardSizeRows-1; k >= 0; k--) {
+        var row = k;
+        var rowDiv = $('<div>');
+        $('.tokenspot').append(rowDiv);
+        $(rowDiv).css({
+            "border": "black solid 1px"
+        });
+        for (var col = 0; col < boardSizeColumns; col++) {
+            var column = col;
+            var colDiv = $('<div>');
+            $(rowDiv).append(colDiv);
+            $(colDiv).text('column: ' + column + ' row: ' + row);
+            $(colDiv).attr('id', '' + column + row);
+            $(colDiv).addClass('tokenHolder');
+            $(colDiv).css({
+                "border-radius": '50%',
+                "border": "1px solid black",
+                'height': '12vmin',
+                'width': '12vmin',
+                "display": "inline-block"
+            });
+            var div = new divCreator();
+                div.column = col;
+                div.row = k;
                 div.open = 'open';
                 div.color = null;
                 boardDivs.push(div);
                 column++;
-            }
         }
-        $('body').append('<br>');
     }
     function divCreator(){
         var newDiv = {
@@ -91,7 +103,111 @@ function createBoard() {
             color: null
         }
     }
+
 }
+//
+//         for (var j = 0; j < boardSizeColumns; j++) {
+//             var column = j;
+//             var newDiv = $('<div>');
+//             if(i===boardSizeRows){
+//                 $('.dropspot').append(newDiv);
+//                 $(newDiv).css({
+//                     "background-color":"blue",
+//                     "height": "10vmin",
+//                     "width": "15vmin",
+//                     //"display": "inline-block",
+//                     "border": "solid black 1px",
+//                     "color": "white",
+//                     "margin": "2px"
+//                 });
+//                 $(newDiv).text('COLUMN ' + column);
+//                 $(newDiv).addClass('dropTokenHere');
+//                 $(newDiv).attr('column', column);
+//                 column++;
+//             } else {
+//                 $('.tokenspot').append(newDiv);
+//                 $(newDiv).text('column: ' + column + ' row: ' + row);
+//                 $(newDiv).attr('id', '' + column + row);
+//                 $(newDiv).addClass('tokenHolder');
+//                 $(newDiv).css({
+//                     "border-radius": '50%',
+//                     "border": "1px solid black",
+//                     'height': '12vmin',
+//                     'width': '12vmin',
+//                     "display": "inline-block"
+//                 });
+//                 var div = new divCreator();
+//                 div.column = j;
+//                 div.row = i;
+//                 div.open = 'open';
+//                 div.color = null;
+//                 boardDivs.push(div);
+//                 column++;
+//             }
+//         }
+//         $('.tokenspot').append('<br>');
+//     }
+//     function divCreator(){
+//         var newDiv = {
+//             column: null,
+//             row: null,
+//             color: null
+//         }
+//     }
+// }
+// function createBoard() {
+//
+//     for (var i = boardSizeRows; i >= 0; i--) {
+//         var row = i;
+//         for (var j = 0; j < boardSizeColumns; j++) {
+//             var column = j;
+//             var newDiv = $('<div>');
+//             if(i===boardSizeRows){
+//                 $('.dropspot').append(newDiv);
+//                 $(newDiv).css({
+//                     "background-color":"blue",
+//                     "height": "10vmin",
+//                     "width": "15vmin",
+//                    //"display": "inline-block",
+//                     "border": "solid black 1px",
+//                     "color": "white",
+//                     "margin": "2px"
+//                 });
+//                 $(newDiv).text('COLUMN ' + column);
+//                 $(newDiv).addClass('dropTokenHere');
+//                 $(newDiv).attr('column', column);
+//                 column++;
+//             } else {
+//                 $('.tokenspot').append(newDiv);
+//                 $(newDiv).text('column: ' + column + ' row: ' + row);
+//                 $(newDiv).attr('id', '' + column + row);
+//                 $(newDiv).addClass('tokenHolder');
+//                 $(newDiv).css({
+//                     "border-radius": '50%',
+//                     "border": "1px solid black",
+//                     'height': '12vmin',
+//                     'width': '12vmin',
+//                     "display": "inline-block"
+//                 });
+//                 var div = new divCreator();
+//                 div.column = j;
+//                 div.row = i;
+//                 div.open = 'open';
+//                 div.color = null;
+//                 boardDivs.push(div);
+//                 column++;
+//             }
+//         }
+//         $('.tokenspot').append('<br>');
+//     }
+//     function divCreator(){
+//         var newDiv = {
+//             column: null,
+//             row: null,
+//             color: null
+//         }
+//     }
+// }
 
 var columnObjectsArray = [];
 
@@ -99,7 +215,8 @@ var columnObjectsArray = [];
 function tokenDrop(){
     columnObjectsArray = [];
     var divCol = $(this).attr('column');
-    //console.log($(boardDivs).find[divCol]);
+    console.log(divCol);
+    console.log($(boardDivs).find[divCol]);
 
     for(var i = 0; i < boardDivs.length; i++){
         if(boardDivs[i].column == divCol){
