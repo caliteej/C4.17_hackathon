@@ -15,17 +15,17 @@ var player = {
     //    function for token drop
     //    check win condition
         changePlayer: function() {
-            currentPlayer = player.Three;
-        }
-    },
-    Three: {
-        color: 'blue',
-    //    function for token drop
-    //    check win condition
-        changePlayer: function() {
             currentPlayer = player.One;
         }
     }
+    // Three: {
+    //     color: 'blue',
+    // //    function for token drop
+    // //    check win condition
+    //     changePlayer: function() {
+    //         currentPlayer = player.One;
+    //     }
+    // }
 };
 
 var currentPlayer = player.One;
@@ -77,6 +77,7 @@ function createBoard() {
                 div.column = j;
                 div.row = i;
                 div.open = 'open';
+                div.color = null;
                 boardDivs.push(div);
                 column++;
             }
@@ -87,7 +88,7 @@ function createBoard() {
         var newDiv = {
             column: null,
             row: null,
-            tokens: null
+            color: null
         }
     }
 }
@@ -104,13 +105,12 @@ function tokenDrop(){
         if(boardDivs[i].column == divCol){
             columnObjectsArray.push(boardDivs[i]);
         } else {
-            console.log('no columns');
+            //console.log('no columns');
         }
     }
-
+    columnObjectsArray = columnObjectsArray.reverse();
     for(var j = 0; j < columnObjectsArray.length; j++) {
-        columnObjectsArray = columnObjectsArray.reverse();
-        console.log(columnObjectsArray[j]);
+        //console.log(columnObjectsArray[j]);
         if (columnObjectsArray[j].open === 'open') {
             console.log('open');
             var currentDiv = columnObjectsArray[j];
@@ -122,6 +122,7 @@ function tokenDrop(){
             //changeColor(columnObjectsArray[i]);
             //checkWinPatterns();
             currentPlayer.changePlayer();
+            checkWinPatterns();
             return;
         } else {
             console.log('nothing open');
@@ -133,8 +134,8 @@ function tokenDrop(){
 
 function checkWinPatterns(){
     checkColumnWins();
-    checkRowWins();
-    checkDiagonalWins();
+    //checkRowWins();
+    //checkDiagonalWins();
 }
 
 
@@ -146,20 +147,36 @@ function checkWinPatterns(){
 function checkColumnWins() {
     var matchCount = 0;
 
-    boardDivs.attr('column')
-    //add column incrementer
-    currentColumn = name(i);
-    for (i = 0; i < currentColumn.length; i) {
-        if (currentColumn[i] === currentColumn[++i]) {
-            console.log('match');
-            matchCount++;
-        } else {
-            console.log('not a match');
-            matchCount = 0;
-            return false;
+    var currentColumn = 0;
+
+    columnObjectsArray = [];
+
+    for(var col = 0; col < boardSizeColumns; col++) {
+        columnObjectsArray = [];
+        //build array of objects in the (col) column to then compare their colors
+        for (var i = 0; i < boardDivs.length; i++) {
+            if (boardDivs[i].column == col) {
+                columnObjectsArray.push(boardDivs[i]);
+            }
         }
-        if (matchCount === 4) { //will need to come back and update this to reflect the desired number of matches needed
-            console.log('Player ' + currentState + ' has won!');
+        //flip array so that objects start from bottom to top
+        columnObjectsArray = columnObjectsArray.reverse();
+        //loop through new array
+        for (var j = 0; j < columnObjectsArray.length; j) {
+            if (columnObjectsArray[j].color === null) {
+                matchCount = 0;
+                break;
+            } else if (columnObjectsArray[j].color === columnObjectsArray[++j].color) {
+                matchCount++;
+                console.log('its a match');
+                if (matchCount === 3) {
+                    alert('You won!');
+                    return;
+                }
+            } else {
+                matchCount = 0;
+                console.log('no matches');
+            }
         }
     }
 }
