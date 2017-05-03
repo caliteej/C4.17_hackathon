@@ -1,0 +1,63 @@
+
+.top-nav {
+    display: flex;
+    border: solid black 1px;
+    background-color: red;
+    justify-content: space-around;
+}
+
+.logo {
+    display: flex;
+    height:12vmin;
+    width: 12vmin;
+    border: solid black 3px;
+
+}
+
+.settings {
+    display: flex;
+    border:solid black 1px;
+    justify-content: center;
+}
+
+.main-area {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}
+
+.side-nav {
+    display: flex;
+    width: 25%;
+}
+
+.gameboard {
+    display: flex;
+    flex-direction: column;
+    border: solid black 1px;
+    background-color: yellow;
+}
+.dropspot {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+}
+
+.dropspot div {
+    display: flex;
+    margin: auto;
+    justify-content: center;
+    align-items: center;
+}
+
+.tokenspot {
+    display: flex;
+    flex-direction: column;
+}
+
+.tokenspot div {
+    display: flex;
+    margin: auto;
+    flex-flow: row wrap;
+    justify-content: space-between;
+}
