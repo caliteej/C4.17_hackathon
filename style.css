@@ -1,4 +1,7 @@
-
+html, body, .viewport{
+    width: 100vw;
+    height: 80vh;
+}
 .top-nav {
     display: flex;
     border: solid black 1px;
@@ -17,13 +20,28 @@
 .settings {
     display: flex;
     border:solid black 1px;
+    justify-content: space-around;
+    flex-direction: row;
+}
+
+.players {
+    display: flex;
+    border:solid black 1px;
     justify-content: center;
+    flex-direction: column;
+}
+
+.boardsize {
+    display: flex;
+    border:solid black 1px;
+    justify-content: center;
+    flex-direction: column;
 }
 
 .main-area {
     display: flex;
     flex-direction: row;
-    justify-content: space-between;
+    height:100%;
 }
 
 .side-nav {
@@ -34,8 +52,7 @@
 .gameboard {
     display: flex;
     flex-direction: column;
-    border: solid black 1px;
-    background-color: yellow;
+    height: 85vh;
 }
 .dropspot {
     display: flex;
@@ -45,9 +62,10 @@
 
 .dropspot div {
     display: flex;
-    margin: auto;
-    justify-content: center;
+    justify-content: space-around;
     align-items: center;
+    text-align: center;
+    margin: 1vh .5vw;
 }
 
 .tokenspot {
@@ -57,7 +75,16 @@
 
 .tokenspot div {
     display: flex;
-    margin: auto;
-    flex-flow: row wrap;
+    flex-flow: row;
     justify-content: space-between;
+}
+
+.tokenspot > div {
+    display: flex;
+    margin: .5vh 0px;
+
+}
+
+input {
+    margin: 2px;
 }

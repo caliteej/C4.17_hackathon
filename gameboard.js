@@ -51,14 +51,13 @@ function createBoard() {
                 $('.dropspot').append(newDiv);
                 $(newDiv).css({
                     "background-color": "blue",
-                    "height": "10vmin",
-                    "width": "15vmin",
-                    "display": "inline-block",
+                    "height": "5vmin",
+                    "width": "12vmin",
                     "border": "solid black 1px",
                     "color": "white",
-                    "margin": "2px"
+                    // "margin": "2px"
                 });
-                $(newDiv).text('COLUMN ' + column);
+                $(newDiv).text('TOKEN SLOT ' + column);
                 $(newDiv).addClass('dropTokenHere');
                 $(newDiv).attr('column', column);
                 column++;
@@ -70,21 +69,18 @@ function createBoard() {
         var row = k;
         var rowDiv = $('<div>');
         $('.tokenspot').append(rowDiv);
-        $(rowDiv).css({
-            "border": "black solid 1px"
-        });
         for (var col = 0; col < boardSizeColumns; col++) {
             var column = col;
             var colDiv = $('<div>');
             $(rowDiv).append(colDiv);
-            $(colDiv).text('column: ' + column + ' row: ' + row);
+            //$(colDiv).text('column: ' + column + ' row: ' + row);
             $(colDiv).attr('id', '' + column + row);
             $(colDiv).addClass('tokenHolder');
             $(colDiv).css({
                 "border-radius": '50%',
-                "border": "1px solid black",
-                'height': '12vmin',
-                'width': '12vmin',
+                "border": "3px solid black",
+                'height': '10vmin',
+                'width': '10vmin',
                 "display": "inline-block"
             });
             var div = new divCreator();
@@ -173,6 +169,17 @@ function checkWinPatterns(divCol, divRow) {
             columnObjectsArray = columnObjectsArray.reverse();
             //loop through new array
             for (var j = 0; j < columnObjectsArray.length; j) {
+                for (n = 0; n < columnObjectsArray.length; n++) {
+                    while (columnObjectsArray[n].color !== null) {
+                        if (columnObjectsArray[n].color !== columnObjectsArray[n + 1].color && columnObjectsArray[n].color !== columnObjectsArray[n + 2].color && columnObjectsArray[n + 1].color !== columnObjectsArray[n + 2].color &&columnObjectsArray[n+2].color !== null) {
+                            console.log('rainbow');
+                            break;
+                        } else {
+                            console.log('no rainbow');
+                            break;
+                        }
+                    }
+                }
                 if (columnObjectsArray[j].color === null) {
                     matchCount = 0;
                     break;
@@ -186,6 +193,7 @@ function checkWinPatterns(divCol, divRow) {
                 } else {
                     matchCount = 0;
                     console.log('no matches');
+                    break;
                 }
             }
         }
