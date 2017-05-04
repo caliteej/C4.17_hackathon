@@ -1,6 +1,3 @@
-
-
-
 var player = {
     One: {
         color: 'red',
@@ -30,7 +27,12 @@ var currentPlayer = player.One;
 $(document).ready(function(){
     createBoard();
     $('.dropTokenHere').click(tokenDrop);
+    $('input').click(function() {
+        connectNumber = Number($('input[name=winningCount]:checked').val());
+    });
 });
+
+var connectNumber = 2;
 
 var boardSizeColumns = 6;
 var boardSizeRows = 7;
@@ -105,6 +107,7 @@ function createBoard() {
 
 var columnObjectsArray = [];
 
+
 //drop token onto the gameboard, find associated div, change token color
 function tokenDrop(){
     columnObjectsArray = [];
@@ -174,7 +177,7 @@ function checkWinPatterns(divCol, divRow) {
                 } else if (columnObjectsArray[j].color === columnObjectsArray[++j].color) {
                     matchCount++;
                     console.log('its a match');
-                    if (matchCount === 3) {
+                    if (matchCount === connectNumber) {
                         gameOver();
                         return;
                     }
@@ -205,7 +208,7 @@ function checkWinPatterns(divCol, divRow) {
                 var color = rowArray[j].color;
                 if (color !== null && previousColor === color) {
                     matchCount++;
-                    if (matchCount === 3) {
+                    if (matchCount === connectNumber) {
                         gameOver();
                         return color;
                     }
@@ -230,22 +233,22 @@ function checkDiagonalWins(divCol, divRow) {
     var indexOfDiv = arrayLocator + currentDivCol + currentDivRow;
 
     checkNE();
-    if (matchCount === 3) {
+    if (matchCount === connectNumber) {
         return;
     }
     secondArrayLocator = arrayLocator;
     checkNW();
-    if (matchCount === 3) {
+    if (matchCount === connectNumber) {
         return;
     }
     secondArrayLocator = arrayLocator;
     checkSE();
-    if (matchCount === 3) {
+    if (matchCount === connectNumber) {
         return;
     }
     secondArrayLocator = arrayLocator;
     checkSW();
-    if (matchCount === 3) {
+    if (matchCount === connectNumber) {
         return;
     }
 
@@ -270,7 +273,7 @@ function checkDiagonalWins(divCol, divRow) {
             currentDivCol--;
             currentDivRow++;
             secondArrayLocator -= 7;
-            if (matchCount === 3) {
+            if (matchCount === connectNumber) {
                 gameOver();
                 return;
             }
@@ -288,7 +291,7 @@ function checkDiagonalWins(divCol, divRow) {
             currentDivCol--;
             currentDivRow++;
             thirdArrayLocator -= 7;
-            if (matchCount === 3) {
+            if (matchCount === connectNumber) {
                 gameOver();
             }
             finalCheckNE();
@@ -319,7 +322,7 @@ function checkDiagonalWins(divCol, divRow) {
             currentDivCol++;
             currentDivRow--;
             secondArrayLocator += 7;
-            if (matchCount === 3) {
+            if (matchCount === connectNumber) {
                 gameOver();
                 return;
             }
@@ -337,7 +340,7 @@ function checkDiagonalWins(divCol, divRow) {
             currentDivCol++;
             currentDivRow--;
             thirdArrayLocator += 7;
-            if (matchCount === 3) {
+            if (matchCount === connectNumber) {
                 gameOver();
                 return;
             }
@@ -369,7 +372,7 @@ function checkDiagonalWins(divCol, divRow) {
             currentDivCol++;
             currentDivRow++;
             secondArrayLocator -= 7;
-            if (matchCount === 3) {
+            if (matchCount === connectNumber) {
                 gameOver();
                 return;
             }
@@ -387,7 +390,7 @@ function checkDiagonalWins(divCol, divRow) {
             currentDivCol++;
             currentDivRow++;
             thirdArrayLocator -= 7;
-            if (matchCount === 3) {
+            if (matchCount === connectNumber) {
                 gameOver();
             }
             finalCheckNW();
@@ -418,7 +421,7 @@ function checkDiagonalWins(divCol, divRow) {
             currentDivCol--;
             currentDivRow--;
             secondArrayLocator += 7;
-            if (matchCount === 3) {
+            if (matchCount === connectNumber) {
                 gameOver();
                 return;
             }
@@ -436,7 +439,7 @@ function checkDiagonalWins(divCol, divRow) {
             currentDivCol--;
             currentDivRow--;
             thirdArrayLocator += 7;
-            if (matchCount === 3) {
+            if (matchCount === connectNumber) {
                 gameOver();
             }
             finalCheckSE();
