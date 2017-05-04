@@ -106,3 +106,19 @@ img {
     height: 25vmin;
     margin: 0 4vw;
 }
+
+form {
+    display: flex;
+    flex-direction: column;
+}
+
+input {
+    display: flex;
+    flex-direction: row;
+}
+
+.connections {
+    width: 25%;
+    display: flex;
+    align-items: center;
+}
