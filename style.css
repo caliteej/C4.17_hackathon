@@ -1,8 +1,20 @@
+html, body, .viewport{
+    width: 100vw;
+    height: 80vh;
+}
+
+h1, h2, h3, h4 {
+    font-family: 'Black Ops One', cursive;
+}
+
+h2, h3, h4 {
+    letter-spacing: 1.5px;
+    line-height: 150%;
+    margin: 1vmin;
+}
 
 .top-nav {
     display: flex;
-    border: solid black 1px;
-    background-color: red;
     justify-content: space-around;
 }
 
@@ -17,25 +29,44 @@
 .settings {
     display: flex;
     border:solid black 1px;
+    justify-content: space-around;
+    flex-direction: row;
+}
+
+.players {
+    display: flex;
+    border:solid black 1px;
     justify-content: center;
+    flex-direction: column;
+}
+
+.boardsize {
+    display: flex;
+    border:solid black 1px;
+    justify-content: center;
+    flex-direction: column;
 }
 
 .main-area {
     display: flex;
     flex-direction: row;
-    justify-content: space-between;
+    height:100%;
+    justify-content: space-around;
 }
 
-.side-nav {
+.instructions {
     display: flex;
     width: 25%;
+    flex-direction: column;
+    /*align-items: center;*/
+    margin: 0 3vw 0 0;
+    height: 75vh;
 }
 
 .gameboard {
     display: flex;
     flex-direction: column;
-    border: solid black 1px;
-    background-color: yellow;
+    height: 85vh;
 }
 .dropspot {
     display: flex;
@@ -45,9 +76,12 @@
 
 .dropspot div {
     display: flex;
-    margin: auto;
-    justify-content: center;
+    justify-content: space-around;
     align-items: center;
+    text-align: center;
+    margin: 1vh .5vw;
+    font-family: 'Black Ops One', cursive;
+    letter-spacing: 1.5px;
 }
 
 .tokenspot {
@@ -57,7 +91,34 @@
 
 .tokenspot div {
     display: flex;
-    margin: auto;
-    flex-flow: row wrap;
+    flex-flow: row;
     justify-content: space-between;
+}
+
+.tokenspot > div {
+    display: flex;
+    margin: .5vh 0px;
+
+}
+
+img {
+    width: 25vmin;
+    height: 25vmin;
+    margin: 0 4vw;
+}
+
+form {
+    display: flex;
+    flex-direction: column;
+}
+
+input {
+    display: flex;
+    flex-direction: row;
+}
+
+.connections {
+    width: 25%;
+    display: flex;
+    align-items: center;
 }
