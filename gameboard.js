@@ -4,24 +4,21 @@
 var player = {
     One: {
         color: 'red',
-    //    function for token drop
-    //    check win condition
+        wins: 0,
         changePlayer: function() {
             currentPlayer = player.Two;
         }
     },
     Two: {
         color: 'green',
-    //    function for token drop
-    //    check win condition
+        wins: 0,
         changePlayer: function() {
             currentPlayer = player.Three;
         }
     },
     Three: {
         color: 'blue',
-    //    function for token drop
-    //    check win condition
+        wins: 0,
         changePlayer: function() {
             currentPlayer = player.One;
         }
@@ -131,8 +128,6 @@ function tokenDrop(){
             // console.log(currentDiv);
             var id = '#' + divCol + j;
             $(id).css({'background-color': currentPlayer.color});
-            //changeColor(columnObjectsArray[i]);
-            //checkWinPatterns();
             currentPlayer.changePlayer();
             checkWinPatterns(divCol, j);
             return;
@@ -180,7 +175,7 @@ function checkWinPatterns(divCol, divRow) {
                     matchCount++;
                     console.log('its a match');
                     if (matchCount === 3) {
-                        alert('You won!');
+                        gameOver();
                         return;
                     }
                 } else {
@@ -210,8 +205,8 @@ function checkWinPatterns(divCol, divRow) {
                 var color = rowArray[j].color;
                 if (color !== null && previousColor === color) {
                     matchCount++;
-                    if (matchCount === 2) {
-                        console.log('you win');
+                    if (matchCount === 3) {
+                        gameOver();
                         return color;
                     }
                 } else {
@@ -225,7 +220,7 @@ function checkWinPatterns(divCol, divRow) {
 
 ////////////////////////////////////////// - Alex
 function checkDiagonalWins(divCol, divRow) {
-    var winCounter = 0;
+    var matchCount = 0;
     var currentDivCol = Number(divCol);
     var currentDivRow = Number(divRow);
     var arrayTotal = ((boardSizeRows - 1) * boardSizeColumns);
@@ -235,22 +230,22 @@ function checkDiagonalWins(divCol, divRow) {
     var indexOfDiv = arrayLocator + currentDivCol + currentDivRow;
 
     checkNE();
-    if (winCounter === 4) {
+    if (matchCount === 3) {
         return;
     }
     secondArrayLocator = arrayLocator;
     checkNW();
-    if (winCounter === 4) {
+    if (matchCount === 3) {
         return;
     }
     secondArrayLocator = arrayLocator;
     checkSE();
-    if (winCounter === 4) {
+    if (matchCount === 3) {
         return;
     }
     secondArrayLocator = arrayLocator;
     checkSW();
-    if (winCounter === 4) {
+    if (matchCount === 3) {
         return;
     }
 
@@ -259,7 +254,7 @@ function checkDiagonalWins(divCol, divRow) {
             console.log('NE No match!');
         } else if (boardDivs[indexOfDiv].color === boardDivs[(secondArrayLocator - boardSizeRows) + (currentDivCol - 1) + (currentDivRow + 1)].color) {
             console.log('NE Match!');
-            winCounter++;
+            matchCount++;
             currentDivCol--;
             currentDivRow++;
             secondArrayLocator -= boardSizeRows;
@@ -271,12 +266,12 @@ function checkDiagonalWins(divCol, divRow) {
 
         if (boardDivs[indexOfDiv].color === boardDivs[(secondArrayLocator - boardSizeRows) + (currentDivCol - 1) + (currentDivRow + 1)].color) {
             console.log('NE Match!');
-            winCounter++;
+            matchCount++;
             currentDivCol--;
             currentDivRow++;
             secondArrayLocator -= 7;
-            if (winCounter === 3) {
-                alert('4 in a row! WIN!!');
+            if (matchCount === 3) {
+                gameOver();
                 return;
             }
             continueToCheckNE();
@@ -289,12 +284,12 @@ function checkDiagonalWins(divCol, divRow) {
     function finalCheckNE() {
         if (boardDivs[indexOfDiv].color === boardDivs[(thirdArrayLocator - boardSizeRows) + (currentDivCol - 1) + (currentDivRow + 1)].color) {
             console.log('NE Match!');
-            winCounter++;
+            matchCount++;
             currentDivCol--;
             currentDivRow++;
             thirdArrayLocator -= 7;
-            if (winCounter === 3) {
-                alert('4 in a row! WIN!!');
+            if (matchCount === 3) {
+                gameOver();
             }
             finalCheckNE();
         } else {
@@ -307,7 +302,7 @@ function checkDiagonalWins(divCol, divRow) {
             console.log('SW No match!');
         } else if (boardDivs[indexOfDiv].color === boardDivs[(secondArrayLocator + boardSizeRows) + (currentDivCol + 1) + (currentDivRow - 1)].color) {
             console.log('SW Match!');
-            winCounter++;
+            matchCount++;
             currentDivCol++;
             currentDivRow--;
             secondArrayLocator += 7;
@@ -320,12 +315,12 @@ function checkDiagonalWins(divCol, divRow) {
             console.log('Nothing there?!');
         } else if (boardDivs[indexOfDiv].color === boardDivs[(secondArrayLocator + boardSizeRows) + (currentDivCol + 1) + (currentDivRow - 1)].color) {
             console.log('SW Match!');
-            winCounter++;
+            matchCount++;
             currentDivCol++;
             currentDivRow--;
             secondArrayLocator += 7;
-            if (winCounter === 3) {
-                alert('4 in a row! WIN!!');
+            if (matchCount === 3) {
+                gameOver();
                 return;
             }
             continueToCheckSW();
@@ -338,12 +333,12 @@ function checkDiagonalWins(divCol, divRow) {
     function finalCheckSW() {
         if (boardDivs[indexOfDiv].color === boardDivs[(thirdArrayLocator + boardSizeRows) + (currentDivCol + 1) + (currentDivRow - 1)].color) {
             console.log('SW Match!');
-            winCounter++;
+            matchCount++;
             currentDivCol++;
             currentDivRow--;
             thirdArrayLocator += 7;
-            if (winCounter === 3) {
-                alert('4 in a row! WIN!!');
+            if (matchCount === 3) {
+                gameOver();
                 return;
             }
             finalCheckSW();
@@ -357,7 +352,7 @@ function checkDiagonalWins(divCol, divRow) {
             console.log('NW No match!');
         } else if (boardDivs[indexOfDiv].color === boardDivs[(secondArrayLocator - boardSizeRows) + (currentDivCol + 1) + (currentDivRow + 1)].color) {
             console.log('NW Match!');
-            winCounter++;
+            matchCount++;
             currentDivCol++;
             currentDivRow++;
             secondArrayLocator -= 7;
@@ -370,12 +365,12 @@ function checkDiagonalWins(divCol, divRow) {
             console.log('Nothing there?!');
         } else if (boardDivs[indexOfDiv].color === boardDivs[(secondArrayLocator - boardSizeRows) + (currentDivCol + 1) + (currentDivRow + 1)].color) {
             console.log('NW Match!');
-            winCounter++;
+            matchCount++;
             currentDivCol++;
             currentDivRow++;
             secondArrayLocator -= 7;
-            if (winCounter === 3) {
-                alert('4 in a row! WIN!!');
+            if (matchCount === 3) {
+                gameOver();
                 return;
             }
             continueToCheckNW();
@@ -388,12 +383,12 @@ function checkDiagonalWins(divCol, divRow) {
     function finalCheckNW() {
         if (boardDivs[indexOfDiv].color === boardDivs[(thirdArrayLocator - boardSizeRows) + (currentDivCol + 1) + (currentDivRow + 1)].color) {
             console.log('NW Match!');
-            winCounter++;
+            matchCount++;
             currentDivCol++;
             currentDivRow++;
             thirdArrayLocator -= 7;
-            if (winCounter === 3) {
-                alert('4 in a row! WIN!!');
+            if (matchCount === 3) {
+                gameOver();
             }
             finalCheckNW();
         } else {
@@ -406,7 +401,7 @@ function checkDiagonalWins(divCol, divRow) {
             console.log('SE No match!');
         } else if (boardDivs[indexOfDiv].color === boardDivs[(secondArrayLocator + boardSizeRows) + (currentDivCol - 1) + (currentDivRow - 1)].color) {
             console.log('SE Match!');
-            winCounter++;
+            matchCount++;
             currentDivCol--;
             currentDivRow--;
             secondArrayLocator += 7;
@@ -419,12 +414,12 @@ function checkDiagonalWins(divCol, divRow) {
             console.log('Nothing there?!');
         } else if (boardDivs[indexOfDiv].color === boardDivs[(secondArrayLocator + boardSizeRows) + (currentDivCol - 1) + (currentDivRow - 1)].color) {
             console.log('SE Match!');
-            winCounter++;
+            matchCount++;
             currentDivCol--;
             currentDivRow--;
             secondArrayLocator += 7;
-            if (winCounter === 3) {
-                alert('4 in a row! WIN!!');
+            if (matchCount === 3) {
+                gameOver();
                 return;
             }
             continueToCheckSE();
@@ -437,12 +432,12 @@ function checkDiagonalWins(divCol, divRow) {
     function finalCheckSE() {
         if (boardDivs[indexOfDiv].color === boardDivs[(thirdArrayLocator + boardSizeRows) + (currentDivCol - 1) + (currentDivRow - 1)].color) {
             console.log('SE Match!');
-            winCounter++;
+            matchCount++;
             currentDivCol--;
             currentDivRow--;
             thirdArrayLocator += 7;
-            if (winCounter === 3) {
-                alert('4 in a row! WIN!!');
+            if (matchCount === 3) {
+                gameOver();
             }
             finalCheckSE();
         } else {
@@ -455,9 +450,32 @@ function checkDiagonalWins(divCol, divRow) {
             if (divRow === i) {
                 arrayLocator = arrayLocator * i;
                 return arrayLocator;
-            } else {
-                arrayLocator -= 7;
             }
         }
     }
+}
+
+function resetBoard() {
+    boardDivs = [];
+    $('.gameboard div').html('');
+    createBoard();
+    $('.dropTokenHere').click(tokenDrop);
+}
+
+function gameOver() {
+    currentPlayer.changePlayer();
+    currentPlayer.changePlayer();
+    currentPlayer.wins++;
+    boardDivs = [];
+    $('.gameboard div').html('');
+    var newDiv = $('<div>');
+    newDiv.text('PLAYER ' + currentPlayer.color.toUpperCase() + ' WINS!');
+    newDiv.css({
+        'font-family': 'sans-serif',
+        'font-size': '100px',
+        'color': 'red',
+        'text-align': 'center'
+    });
+    $('.gameboard').append(newDiv);
+    setTimeout(resetBoard, 1500);
 }
