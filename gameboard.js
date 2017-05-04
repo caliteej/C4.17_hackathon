@@ -1,3 +1,5 @@
+
+//player object that allows flipping between players, would also make changing to a 2 player game easy
 var player = {
     One: {
         color: 'red',
@@ -39,7 +41,8 @@ var boardSizeRows = 7;
 
 var boardDivs = [];
 
-
+//dynamically create the board so that for future version the player could choose the size on their own
+//As the board is being created it is also styling each div and adding classes
 function createBoard() {
     for (var i = boardSizeRows; i >= 0; i--) {
         var row = i;
@@ -54,7 +57,6 @@ function createBoard() {
                     "width": "12vmin",
                     "border": "solid black 1px",
                     "color": "white",
-                    // "margin": "2px"
                 });
                 $(newDiv).text('Token Slot ' + column);
                 $(newDiv).addClass('dropTokenHere');
@@ -63,7 +65,8 @@ function createBoard() {
             }
         }
     }
-
+//After creating the token drop divs each row is then built one by one, each div is also getting a unique id
+//The id will be used later to modify divs based on the token drop
     for (var k = boardSizeRows-1; k >= 0; k--) {
         var row = k;
         var rowDiv = $('<div>');
@@ -72,7 +75,6 @@ function createBoard() {
             var column = col;
             var colDiv = $('<div>');
             $(rowDiv).append(colDiv);
-            //$(colDiv).text('column: ' + column + ' row: ' + row);
             $(colDiv).attr('id', '' + column + row);
             $(colDiv).addClass('tokenHolder');
             $(colDiv).css({
@@ -104,12 +106,11 @@ function createBoard() {
 var columnObjectsArray = [];
 
 
-//drop token onto the gameboard, find associated div, change token color
+//drop token onto the gameboard, find associated div, change token color on both the board and in the associated object
 function tokenDrop(){
     columnObjectsArray = [];
     var divCol = $(this).attr('column');
-    console.log(divCol);
-    console.log($(boardDivs).find[divCol]);
+
 
     for(var i = 0; i < boardDivs.length; i++){
         if(boardDivs[i].column == divCol){
@@ -120,23 +121,20 @@ function tokenDrop(){
     columnObjectsArray = columnObjectsArray.reverse();
     for(var j = 0; j < columnObjectsArray.length; j++) {
         if (columnObjectsArray[j].open === 'open') {
-            // console.log('open');
             var currentDiv = columnObjectsArray[j];
             currentDiv.open = 'closed';
             currentDiv.color = currentPlayer.color;
-            // console.log(currentDiv);
             var id = '#' + divCol + j;
             $(id).css({'background-color': currentPlayer.color});
             currentPlayer.changePlayer();
             checkWinPatterns(divCol, j);
             return;
         } else {
-            // console.log('nothing open');
         }
     }
 }
 
-////////////////////////////
+//after each coin drop the game will check for any possible win
 
 function checkWinPatterns(divCol, divRow) {
     checkColumnWins();
@@ -145,91 +143,83 @@ function checkWinPatterns(divCol, divRow) {
 }
 
 
-///////////////////////////////// - TJ
 
+function checkColumnWins() {
+    var matchCount = 0;
 
-    function checkColumnWins() {
-        var matchCount = 0;
+    columnObjectsArray = [];
 
-        var currentColumn = 0;
-
+    for (var col = 0; col < boardSizeColumns; col++) {
         columnObjectsArray = [];
-
-        for (var col = 0; col < boardSizeColumns; col++) {
-            columnObjectsArray = [];
-            //build array of objects in the (col) column to then compare their colors
-            for (var i = 0; i < boardDivs.length; i++) {
-                if (boardDivs[i].column == col) {
-                    columnObjectsArray.push(boardDivs[i]);
+        //build array of objects in the (col) column to then compare their colors
+        for (var i = 0; i < boardDivs.length; i++) {
+            if (boardDivs[i].column == col) {
+                columnObjectsArray.push(boardDivs[i]);
+            }
+        }
+        //flip array so that objects start from bottom to top
+        columnObjectsArray = columnObjectsArray.reverse();
+        //loop through new array to see if any matches within the column exist
+        //we are also checking to see if a 'rainbow' will occur which would be 3 alternating colors in a row
+        for (var j = 0; j < columnObjectsArray.length; j) {
+            for (n = 0; n < columnObjectsArray.length; n++) {
+                while (columnObjectsArray[n].color !== null) {
+                    if (columnObjectsArray[n].color !== columnObjectsArray[n + 1].color && columnObjectsArray[n].color !== columnObjectsArray[n + 2].color && columnObjectsArray[n + 1].color !== columnObjectsArray[n + 2].color &&columnObjectsArray[n+2].color !== null) {
+                        alert ('Double Rainbow All the Way....Wow....Wow');
+                        break;
+                    } else {
+                        break;
+                    }
                 }
             }
-            //flip array so that objects start from bottom to top
-            columnObjectsArray = columnObjectsArray.reverse();
-            //loop through new array
-            for (var j = 0; j < columnObjectsArray.length; j) {
-                for (n = 0; n < columnObjectsArray.length; n++) {
-                    while (columnObjectsArray[n].color !== null) {
-                        if (columnObjectsArray[n].color !== columnObjectsArray[n + 1].color && columnObjectsArray[n].color !== columnObjectsArray[n + 2].color && columnObjectsArray[n + 1].color !== columnObjectsArray[n + 2].color &&columnObjectsArray[n+2].color !== null) {
-                            alert ('Double Rainbow All the Way....Wow....Wow');
-                            break;
-                        } else {
-                            console.log('no rainbow');
-                            break;
-                        }
-                    }
+            if (columnObjectsArray[j].color === null) {
+                matchCount = 0;
+                break;
+            } else if (columnObjectsArray[j].color === columnObjectsArray[++j].color) {
+                matchCount++;
+                if (matchCount === connectNumber) {
+                    gameOver();
+                    return;
                 }
-                if (columnObjectsArray[j].color === null) {
-                    matchCount = 0;
-                    break;
-                } else if (columnObjectsArray[j].color === columnObjectsArray[++j].color) {
-                    matchCount++;
-                    console.log('its a match');
-                    if (matchCount === connectNumber) {
-                        gameOver();
-                        return;
-                    }
-                } else {
-                    matchCount = 0;
-                    console.log('no matches');
-                    break;
-                }
+            } else {
+                matchCount = 0;
+                break;
             }
         }
     }
+}
 
+//similar to the column check function about this is moving row by row (more specifically left to right) to see if there are any wins
+function checkRowWins() {
+    rowArray = [];
+    var matchCount = 0;
 
-//////////////////////////////// - Anna
+    var previousColor = null;
 
-    function checkRowWins() {
-        rowArray = [];
-        var matchCount = 0;
-
-        var previousColor = null;
-
-        for (var r = 0; r < boardSizeRows; r++) {
-            for (var i = 0; i < boardDivs.length; i++) {
-                if (boardDivs[i].row === r) {
-                    rowArray.push(boardDivs[i]);
-                }
-            }
-            for (var j = 0; j < rowArray.length; j++) {
-                var color = rowArray[j].color;
-                if (color !== null && previousColor === color) {
-                    matchCount++;
-                    if (matchCount === connectNumber) {
-                        gameOver();
-                        return color;
-                    }
-                } else {
-                    matchCount = 0;
-                }
-                previousColor = color;
+    for (var r = 0; r < boardSizeRows; r++) {
+        for (var i = 0; i < boardDivs.length; i++) {
+            if (boardDivs[i].row === r) {
+                rowArray.push(boardDivs[i]);
             }
         }
+        for (var j = 0; j < rowArray.length; j++) {
+            var color = rowArray[j].color;
+            if (color !== null && previousColor === color) {
+                matchCount++;
+                if (matchCount === connectNumber) {
+                    gameOver();
+                    return color;
+                }
+            } else {
+                matchCount = 0;
+            }
+            previousColor = color;
+        }
     }
+}
 
 
-////////////////////////////////////////// - Alex
+// Diagonal Win Condition Checks
 function checkDiagonalWins(divCol, divRow) {
     var matchCount = 0;
     var currentDivCol = Number(divCol);
@@ -240,6 +230,7 @@ function checkDiagonalWins(divCol, divRow) {
     var thirdArrayLocator = arrayLocator;
     var indexOfDiv = arrayLocator + currentDivCol + currentDivRow;
 
+    // Calling the functions for all the diagonal directions
     checkNE();
     if (matchCount === connectNumber) {
         return;
@@ -260,11 +251,10 @@ function checkDiagonalWins(divCol, divRow) {
         return;
     }
 
+    //Initial check for North East of the Token
     function checkNE() {
         if (boardDivs[(secondArrayLocator - boardSizeRows) + (currentDivCol - 1) + (currentDivRow + 1)].color === null) {
-            console.log('NE No match!');
         } else if (boardDivs[indexOfDiv].color === boardDivs[(secondArrayLocator - boardSizeRows) + (currentDivCol - 1) + (currentDivRow + 1)].color) {
-            console.log('NE Match!');
             matchCount++;
             currentDivCol--;
             currentDivRow++;
@@ -273,10 +263,10 @@ function checkDiagonalWins(divCol, divRow) {
         }
     }
 
+    //Continuing checking North East of the Token
     function continueToCheckNE() {
 
         if (boardDivs[indexOfDiv].color === boardDivs[(secondArrayLocator - boardSizeRows) + (currentDivCol - 1) + (currentDivRow + 1)].color) {
-            console.log('NE Match!');
             matchCount++;
             currentDivCol--;
             currentDivRow++;
@@ -287,14 +277,13 @@ function checkDiagonalWins(divCol, divRow) {
             }
             continueToCheckNE();
         } else if (boardDivs[indexOfDiv].color !== boardDivs[(secondArrayLocator - boardSizeRows) + (currentDivCol - 1) + (currentDivRow + 1)].color) {
-            console.log('NE No match!');
             finalCheckSW();
         }
     }
 
+    //Final Check through North East of Token
     function finalCheckNE() {
         if (boardDivs[indexOfDiv].color === boardDivs[(thirdArrayLocator - boardSizeRows) + (currentDivCol - 1) + (currentDivRow + 1)].color) {
-            console.log('NE Match!');
             matchCount++;
             currentDivCol--;
             currentDivRow++;
@@ -304,15 +293,13 @@ function checkDiagonalWins(divCol, divRow) {
             }
             finalCheckNE();
         } else {
-            console.log('SW No match!');
         }
     }
 
+    //Initial check for South West of Token
     function checkSW() {
         if (boardDivs[(secondArrayLocator + boardSizeRows) + (currentDivCol + 1) + (currentDivRow - 1)].color === null) {
-            console.log('SW No match!');
         } else if (boardDivs[indexOfDiv].color === boardDivs[(secondArrayLocator + boardSizeRows) + (currentDivCol + 1) + (currentDivRow - 1)].color) {
-            console.log('SW Match!');
             matchCount++;
             currentDivCol++;
             currentDivRow--;
@@ -321,11 +308,10 @@ function checkDiagonalWins(divCol, divRow) {
         }
     }
 
+    //Continue checking South West of Token
     function continueToCheckSW() {
         if (boardDivs[(secondArrayLocator + boardSizeRows) + (currentDivCol + 1) + (currentDivRow - 1)].color === null) {
-            console.log('Nothing there?!');
         } else if (boardDivs[indexOfDiv].color === boardDivs[(secondArrayLocator + boardSizeRows) + (currentDivCol + 1) + (currentDivRow - 1)].color) {
-            console.log('SW Match!');
             matchCount++;
             currentDivCol++;
             currentDivRow--;
@@ -336,14 +322,13 @@ function checkDiagonalWins(divCol, divRow) {
             }
             continueToCheckSW();
         } else if (boardDivs[indexOfDiv].color !== boardDivs[(secondArrayLocator + boardSizeRows) + (currentDivCol + 1) + (currentDivRow - 1)].color) {
-            console.log('SW No match!');
             finalCheckNE();
         }
     }
 
+    //Final check through South West of Token
     function finalCheckSW() {
         if (boardDivs[indexOfDiv].color === boardDivs[(thirdArrayLocator + boardSizeRows) + (currentDivCol + 1) + (currentDivRow - 1)].color) {
-            console.log('SW Match!');
             matchCount++;
             currentDivCol++;
             currentDivRow--;
@@ -354,15 +339,13 @@ function checkDiagonalWins(divCol, divRow) {
             }
             finalCheckSW();
         } else {
-            console.log('SW No match!');
         }
     }
 
+    //Initial check for North West of Token
     function checkNW() {
         if (boardDivs[(secondArrayLocator - boardSizeRows) + (currentDivCol + 1) + (currentDivRow + 1)].color === null) {
-            console.log('NW No match!');
         } else if (boardDivs[indexOfDiv].color === boardDivs[(secondArrayLocator - boardSizeRows) + (currentDivCol + 1) + (currentDivRow + 1)].color) {
-            console.log('NW Match!');
             matchCount++;
             currentDivCol++;
             currentDivRow++;
@@ -371,11 +354,10 @@ function checkDiagonalWins(divCol, divRow) {
         }
     }
 
+    //Continue checking North West of Token
     function continueToCheckNW() {
         if (boardDivs[(secondArrayLocator - boardSizeRows) + (currentDivCol + 1) + (currentDivRow + 1)].color === null) {
-            console.log('Nothing there?!');
         } else if (boardDivs[indexOfDiv].color === boardDivs[(secondArrayLocator - boardSizeRows) + (currentDivCol + 1) + (currentDivRow + 1)].color) {
-            console.log('NW Match!');
             matchCount++;
             currentDivCol++;
             currentDivRow++;
@@ -386,14 +368,13 @@ function checkDiagonalWins(divCol, divRow) {
             }
             continueToCheckNW();
         } else if (boardDivs[indexOfDiv].color !== boardDivs[(secondArrayLocator - boardSizeRows) + (currentDivCol + 1) + (currentDivRow + 1)].color) {
-            console.log('NW No match!');
             finalCheckSE();
         }
     }
 
+    //Final check through North West of Token
     function finalCheckNW() {
         if (boardDivs[indexOfDiv].color === boardDivs[(thirdArrayLocator - boardSizeRows) + (currentDivCol + 1) + (currentDivRow + 1)].color) {
-            console.log('NW Match!');
             matchCount++;
             currentDivCol++;
             currentDivRow++;
@@ -403,15 +384,13 @@ function checkDiagonalWins(divCol, divRow) {
             }
             finalCheckNW();
         } else {
-            console.log('SW No match!');
         }
     }
 
+    //Initial check for South East of Token
     function checkSE() {
         if (boardDivs[(secondArrayLocator + boardSizeRows) + (currentDivCol - 1) + (currentDivRow - 1)].color === null) {
-            console.log('SE No match!');
         } else if (boardDivs[indexOfDiv].color === boardDivs[(secondArrayLocator + boardSizeRows) + (currentDivCol - 1) + (currentDivRow - 1)].color) {
-            console.log('SE Match!');
             matchCount++;
             currentDivCol--;
             currentDivRow--;
@@ -420,11 +399,10 @@ function checkDiagonalWins(divCol, divRow) {
         }
     }
 
+    //Continue checking through South East of Token
     function continueToCheckSE() {
         if (boardDivs[(secondArrayLocator + boardSizeRows) + (currentDivCol - 1) + (currentDivRow - 1)].color === null) {
-            console.log('Nothing there?!');
         } else if (boardDivs[indexOfDiv].color === boardDivs[(secondArrayLocator + boardSizeRows) + (currentDivCol - 1) + (currentDivRow - 1)].color) {
-            console.log('SE Match!');
             matchCount++;
             currentDivCol--;
             currentDivRow--;
@@ -435,14 +413,13 @@ function checkDiagonalWins(divCol, divRow) {
             }
             continueToCheckSE();
         } else if (boardDivs[indexOfDiv].color !== boardDivs[(secondArrayLocator + boardSizeRows) + (currentDivCol - 1) + (currentDivRow - 1)].color) {
-            console.log('SE No match!');
             finalCheckNW();
         }
     }
 
+    //Final check through South East of Token
     function finalCheckSE() {
         if (boardDivs[indexOfDiv].color === boardDivs[(thirdArrayLocator + boardSizeRows) + (currentDivCol - 1) + (currentDivRow - 1)].color) {
-            console.log('SE Match!');
             matchCount++;
             currentDivCol--;
             currentDivRow--;
@@ -452,10 +429,10 @@ function checkDiagonalWins(divCol, divRow) {
             }
             finalCheckSE();
         } else {
-            console.log('SW No match!');
         }
     }
 
+    //Finds the number needed to locate tokens
     function findArrayLocator(divRow) {
         for (var i = 1; i <= boardSizeColumns; i++) {
             if (divRow === i) {
@@ -466,6 +443,7 @@ function checkDiagonalWins(divCol, divRow) {
     }
 }
 
+//Resets the board for a new game
 function resetBoard() {
     boardDivs = [];
     $('.gameboard div').html('');
@@ -473,6 +451,7 @@ function resetBoard() {
     $('.dropTokenHere').click(tokenDrop);
 }
 
+//Game ends, winner is announced and resetBoard is called
 function gameOver() {
     currentPlayer.changePlayer();
     currentPlayer.changePlayer();
