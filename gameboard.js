@@ -10,14 +10,14 @@ var player = {
         }
     },
     Two: {
-        color: 'green',
+        color: 'blue',
         wins: 0,
         changePlayer: function() {
             currentPlayer = player.Three;
         }
     },
     Three: {
-        color: 'blue',
+        color: 'green',
         wins: 0,
         changePlayer: function() {
             currentPlayer = player.One;
@@ -54,7 +54,7 @@ function createBoard() {
                     "color": "white",
                     // "margin": "2px"
                 });
-                $(newDiv).text('TOKEN SLOT ' + column);
+                $(newDiv).text('Token Slot ' + column);
                 $(newDiv).addClass('dropTokenHere');
                 $(newDiv).attr('column', column);
                 column++;
@@ -167,7 +167,7 @@ function checkWinPatterns(divCol, divRow) {
                 for (n = 0; n < columnObjectsArray.length; n++) {
                     while (columnObjectsArray[n].color !== null) {
                         if (columnObjectsArray[n].color !== columnObjectsArray[n + 1].color && columnObjectsArray[n].color !== columnObjectsArray[n + 2].color && columnObjectsArray[n + 1].color !== columnObjectsArray[n + 2].color &&columnObjectsArray[n+2].color !== null) {
-                            console.log('rainbow');
+                            alert ('Double Rainbow All the Way....Wow....Wow');
                             break;
                         } else {
                             console.log('no rainbow');
